@@ -56,4 +56,8 @@ resources:
       image: { get_param: image }
       key_name: { get_resource: ssh_keypair }
 
+outputs:
+
+  private_ip:
+    value: { get_attr: [webserver, privateIPv4] }
     

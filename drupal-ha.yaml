@@ -153,7 +153,7 @@ resources:
     properties:
       name: { get_param: site_domain }
       nodes:
-      - addresses: { get_attr: [webservers_setup, privateIPv4] }
+      - addresses: { get_attr: [webservers_setup, private_ip] }
         port: 80
         condition: ENABLED
       port: 80
@@ -163,3 +163,9 @@ resources:
       virtualIps:
       - type: PUBLIC
         ipVersion: IPV4
+
+outputs:
+
+  server_private_ips:
+    value: { get_attr: [webservers_setup, private_ip] }
+    description: Array of private IP's of the Cloud Servers created
