@@ -1,0 +1,167 @@
+heat_template_version: 2013-05-23
+
+description: |
+  This is a Heat template to deploy Load Balanced Drupal web servers with a
+  backend database server.
+
+parameter_groups:
+
+- label: General Settings
+  parameters:
+  - site_domain
+
+- label: Web Server Settings
+  parameters:
+  - webserver_count
+  - webserver_flavor
+  - webserver_image
+
+- label: Database Settings
+  parameters:
+  - db_instance_flavor
+  - db_instance_size
+  - db_username
+
+parameters:
+
+  # General Settings
+  site_domain:
+    label: Web Site Domain Name
+    description: Domain name of your Drupal-powered web site
+    type: string
+
+  # Web Server Settings
+  webserver_count:
+    label: Web Server Count
+    description: Number of web servers to deploy
+    type: number
+    default: 2
+    constraints:
+    - range:
+        min: 0
+        max: 7
+      description: Must be between 0 and 7 servers.
+
+  webserver_flavor:
+    label: Web Server Flavor
+    description: Cloud Server flavor to use on all web servers
+    type: string
+    default: 2 GB Performance
+    constraints:
+    - allowed_values:
+      - 1 GB Performance
+      - 2 GB Performance
+      - 4 GB Performance
+      - 8 GB Performance
+      - 15 GB Performance
+      - 30 GB Performance
+      - 1GB Standard Instance
+      - 2GB Standard Instance
+      - 4GB Standard Instance
+      - 8GB Standard Instance
+      - 15GB Standard Instance
+      - 30GB Standard Instance
+      description: |
+        Must be a valid Rackspace Cloud Server flavor for the region you have
+        selected to deploy into.
+
+  webserver_image:
+    label: Operating System
+    description: Server image used for all web servers
+    type: string
+    default: Ubuntu 14.04 LTS (Trusty Tahr)
+    constraints:
+    - allowed_values:
+      - Ubuntu 12.04 LTS (Precise Pangolin)
+      - Ubuntu 13.04 LTS (Saucy Salamander)
+      - Ubuntu 14.04 LTS (Trusty Tahr)
+      description: Must be a supported operating system.
+
+  # Database settings
+  db_instance_flavor:
+    description: Rackspace Cloud Database Flavor to determine amount of RAM
+    type: string
+    default: 1GB Instance
+    constraints:
+    - allowed_values:
+      - 512MB Instance
+      - 1GB Instance
+      - 2GB Instance
+      - 4GB Instance
+      - 8GB Instance
+      - 16GB Instance
+      description: |
+        Must be a valid Rackspace Cloud Database flavor for the region you have
+        selected to deploy into.
+
+  db_instance_size:
+    type: number
+    description: Size of the Rackspace Cloud Database, in GB
+    default: 10
+    constraints:
+    - range:
+        min: 10
+        max: 150
+    description: |
+        Database instance size, in GB. min 10, max 150
+
+  db_username:
+    description: Username for the database
+    type: string
+    default: drupal_db_user
+    constraints:
+    - allowed_pattern: "^(.){1,16}$"
+      description: |
+        Must be shorter than 16 characters, this is due to MySQL's maximum
+        username length.
+
+resources:
+
+  db_password:
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
+
+  db:
+    type: OS::Trove::Instance
+    properties:
+      name: drupal_db_instance
+      flavor: { get_param: db_instance_flavor }
+      size: { get_param: db_instance_size }
+      databases:
+      - name: drupal_db
+      users:
+      - name: { get_param: db_username }
+        password: { get_resource: db_password }
+        databases: [ drupal_db ]
+
+  webservers_setup:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: { get_param: webserver_count }
+      resource_def:
+        type: https://raw.githubusercontent.com/ycombinator/drupal-heat-demo/master/drupal-webserver.yaml
+        properties:
+          name: drupal_webserver
+          flavor: { get_param: webserver_flavor }
+          image: { get_param: webserver_image }
+          key_name: { get_resource: ssh_keypair }
+
+  load_balancer:
+    type: "Rackspace::Cloud::LoadBalancer"
+    depends_on:
+    - webservers_setup
+    properties:
+      name: { get_param: site_domain }
+      nodes:
+      - addresses: { get_attr: [webservers_setup, privateIPv4] }
+        port: 80
+        condition: ENABLED
+      port: 80
+      protocol: HTTP
+      algorithm: ROUND_ROBIN
+      contentCaching: ENABLED
+      virtualIps:
+      - type: PUBLIC
+        ipVersion: IPV4
