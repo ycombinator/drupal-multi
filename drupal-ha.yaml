@@ -141,7 +141,7 @@ resources:
     properties:
       count: { get_param: webserver_count }
       resource_def:
-        type: https://raw.githubusercontent.com/ycombinator/drupal-heat-demo/master/drupal-webserver.yaml
+        type: https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-webserver.yaml
         properties:
           name: drupal_webserver
           flavor: { get_param: webserver_flavor }
