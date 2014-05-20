@@ -166,6 +166,6 @@ resources:
 
 outputs:
 
-  server_private_ips:
-    value: { get_attr: [webservers_setup, private_ip] }
-    description: Array of private IP's of the Cloud Servers created
+  site_ip:
+    value: { get_attr: [load_balancer, PublicIp] }
+    description: Site load balancer's public IP address
