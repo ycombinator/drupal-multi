@@ -143,10 +143,8 @@ resources:
       resource_def:
         type: https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-webserver.yaml
         properties:
-          name: drupal_webserver
           flavor: { get_param: webserver_flavor }
           image: { get_param: webserver_image }
-          key_name: { get_resource: ssh_keypair }
 
   load_balancer:
     type: "Rackspace::Cloud::LoadBalancer"
