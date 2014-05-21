@@ -31,36 +31,7 @@ when 'rhel', 'fedora'
   end
 end
 
-if node['drupal']['site']['host'] == "localhost"
-  include_recipe "mysql::server"
-else
-  include_recipe "mysql::client"
-end
-
-execute "mysql-install-drupal-privileges" do
-  command "/usr/bin/mysql -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} < /etc/mysql/drupal-grants.sql"
-  action :nothing
-end
-
-template "/etc/mysql/drupal-grants.sql" do
-  path "/etc/mysql/drupal-grants.sql"
-  source "grants.sql.erb"
-  owner "root"
-  group "root"
-  mode "0600"
-  variables(
-    :user     => node['drupal']['db']['user'],
-    :password => node['drupal']['db']['password'],
-    :database => node['drupal']['db']['database'],
-    :host => node['drupal']['site']['host']
-  )
-  notifies :run, "execute[mysql-install-drupal-privileges]", :immediately
-end
-
-execute "create #{node['drupal']['db']['database']} database" do
-  command "/usr/bin/mysqladmin -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} create #{node['drupal']['db']['database']}"
-  not_if "mysql -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} --silent --skip-column-names --execute=\"show databases like '#{node['drupal']['db']['database']}'\" | grep #{node['drupal']['db']['database']}"
-end
+include_recipe "mysql::client"
 
 execute "download-and-install-drupal" do
   cwd  File.dirname(node['drupal']['dir'])
