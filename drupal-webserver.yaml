@@ -117,9 +117,9 @@ resources:
             database: { get_param: db_name }
             user: { get_param: db_username }
             password: { get_param: db_password }
-          mysql:
-            server_root_username: { get_param: db_root_username }
-            server_root_password: { get_param: db_root_password }
+        mysql:
+          server_root_user: { get_param: db_root_username }
+          server_root_password: { get_param: db_root_password }
         run_list: ["recipe[apt]",
                    "recipe[drupal]"]
 
