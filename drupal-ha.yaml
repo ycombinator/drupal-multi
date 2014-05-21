@@ -179,7 +179,7 @@ resources:
       port: 80
       protocol: HTTP
       algorithm: ROUND_ROBIN
-      contentCaching: ENABLED
+      sessionPersistence: HTTP_COOKIE
       virtualIps:
       - type: PUBLIC
         ipVersion: IPV4
