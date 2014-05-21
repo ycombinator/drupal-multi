@@ -38,7 +38,7 @@ else
 end
 
 execute "mysql-install-drupal-privileges" do
-  command "/usr/bin/mysql -h #{node['drupal']['db']['host']} -u root -p#{node['mysql']['server_root_password']} < /etc/mysql/drupal-grants.sql"
+  command "/usr/bin/mysql -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} < /etc/mysql/drupal-grants.sql"
   action :nothing
 end
 
@@ -58,8 +58,8 @@ template "/etc/mysql/drupal-grants.sql" do
 end
 
 execute "create #{node['drupal']['db']['database']} database" do
-  command "/usr/bin/mysqladmin -h #{node['drupal']['db']['host']} -u root -p#{node['mysql']['server_root_password']} create #{node['drupal']['db']['database']}"
-  not_if "mysql -h #{node['drupal']['db']['host']} -u root -p#{node['mysql']['server_root_password']} --silent --skip-column-names --execute=\"show databases like '#{node['drupal']['db']['database']}'\" | grep #{node['drupal']['db']['database']}"
+  command "/usr/bin/mysqladmin -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} create #{node['drupal']['db']['database']}"
+  not_if "mysql -h #{node['drupal']['db']['host']} -u #{node['mysql']['server_root_user']} -p#{node['mysql']['server_root_password']} --silent --skip-column-names --execute=\"show databases like '#{node['drupal']['db']['database']}'\" | grep #{node['drupal']['db']['database']}"
 end
 
 execute "download-and-install-drupal" do
