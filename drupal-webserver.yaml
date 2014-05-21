@@ -61,7 +61,11 @@ parameters:
         username length.
 
   db_password:
-    description: Password for the database user
+    description: Password for the database user with access to the Drupal database
+    type: string
+
+  db_root_password:
+    description: Password for the database root user
     type: string
 
   # Chef configuration parameters
@@ -104,10 +108,12 @@ resources:
         drupal:
           version: 7.28
           db:
-            host:  { get_param: db_hostname }
+            host: { get_param: db_hostname }
             database: { get_param: db_name }
             user: { get_param: db_username }
             password: { get_param: db_password }
+          mysql:
+            server_root_password: { get_param: db_root_password }
         run_list: ["recipe[apt]",
                    "recipe[drupal]"]
 

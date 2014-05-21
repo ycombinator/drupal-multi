@@ -121,6 +121,12 @@ resources:
       length: 16
       sequence: lettersdigits
 
+  db_root_password:
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
+
   db:
     type: OS::Trove::Instance
     properties:
@@ -132,6 +138,9 @@ resources:
       users:
       - name: { get_param: db_username }
         password: { get_resource: db_password }
+        databases: [ drupal_db ]
+      - name: root
+        password: { get_resource: db_root_password }
         databases: [ drupal_db ]
 
   webservers_setup:
@@ -147,6 +156,7 @@ resources:
           db_hostname: { get_attr: [db, hostname] }
           db_username: { get_param: db_username }
           db_password: { get_resource: db_password }
+          db_root_password: { get_resource: db_root_password }
 
   load_balancer:
     type: "Rackspace::Cloud::LoadBalancer"
