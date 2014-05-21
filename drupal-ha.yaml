@@ -150,6 +150,8 @@ resources:
 
   webservers_setup:
     type: OS::Heat::ResourceGroup
+    depends_on:
+    - db
     properties:
       count: { get_param: webserver_count }
       resource_def:
