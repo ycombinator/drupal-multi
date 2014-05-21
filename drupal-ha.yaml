@@ -143,6 +143,10 @@ resources:
         properties:
           flavor: { get_param: webserver_flavor }
           image: { get_param: webserver_image }
+          db_name: drupal_db
+          db_hostname: { get_attr: [db, hostname] }
+          db_username: { get_param: db_username }
+          db_password: { get_resource: db_password }
 
   load_balancer:
     type: "Rackspace::Cloud::LoadBalancer"

@@ -5,6 +5,7 @@ description: |
 
 parameters:
 
+  # Web server parameters
   flavor:
     label: Web Server Flavor
     description: Cloud Server flavor to use on all web servers
@@ -38,6 +39,42 @@ parameters:
       - Ubuntu 12.04 LTS (Precise Pangolin)
       description: Must be a supported operating system.
 
+  # Drupal database parameters
+  db_hostname:
+    description: Hostname for the database instance
+    type: string
+    default: localhost
+
+  db_name:
+    description: Database name
+    type: string
+    default: drupal_db
+
+  db_username:
+    description: Username for the database
+    type: string
+    default: drupal_db_user
+    constraints:
+    - allowed_pattern: "^(.){1,16}$"
+      description: |
+        Must be shorter than 16 characters, this is due to MySQL's maximum
+        username length.
+
+  db_password:
+    description: Password for the database user
+    type: string
+
+  # Chef configuration parameters
+  kitchen:
+    description: URL for the kitchen to use, fetched using git
+    type: string
+    default: https://github.com/ycombinator/drupal-multi
+
+  chef_version:
+    description: Version of chef client to use
+    type: string
+    default: 11.12.4
+
 resources:
 
   ssh_keypair:
@@ -53,6 +90,26 @@ resources:
       flavor: { get_param: flavor }
       image: { get_param: image }
       key_name: { get_resource: ssh_keypair }
+
+  webserver_setup:
+    type: OS::Heat::ChefSolo
+    depends_on: webserver
+    properties:
+      host: { get_attr: [webserver, accessIPv4] }
+      username: root
+      private_key: { get_attr: [ssh_keypair, private_key] }
+      kitchen: { get_param: kitchen }
+      chef_version: { get_param: chef_version }
+      node:
+        drupal:
+          version: 7.28
+          db:
+            host:  { get_param: db_hostname }
+            database: { get_param: db_name }
+            user: { get_param: db_username }
+            password: { get_param: db_password }
+        run_list: ["recipe[apt]",
+                   "recipe[drupal]"]
 
 outputs:
 
