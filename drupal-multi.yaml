@@ -148,6 +148,11 @@ resources:
       resource_def:
         type: https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-webserver.yaml
         properties:
+          name:
+            str_replace:
+              template: "%stack_name%_webserver"
+              params:
+                "%stack_name%": { get_param: "OS::stack_name" }
           flavor: { get_param: webserver_flavor }
           image: { get_param: webserver_image }
           ssh_keypair_name: { get_param: ssh_keypair_name }
