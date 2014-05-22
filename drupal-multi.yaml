@@ -129,7 +129,7 @@ resources:
         str_replace:
           template: "%stack_name%_db"
           params:
-            "%stack_name%": { get_param: OS::stack_name }
+            "%stack_name%": { get_param: "OS::stack_name" }
       flavor: { get_param: db_instance_flavor }
       size: { get_param: db_instance_size }
       databases:
@@ -166,7 +166,7 @@ resources:
         str_replace:
           template: "%stack_name%_lb"
           params:
-            "%stack_name%": { get_param: OS::stack_name }
+            "%stack_name%": { get_param: "OS::stack_name" }
       nodes:
       - addresses: { get_attr: [webservers_setup, private_ip] }
         port: 80

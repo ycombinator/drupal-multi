@@ -93,7 +93,7 @@ resources:
         str_replace:
           template: "%stack_name%_webserver"
           params:
-            "%stack_name%": { get_param: OS::stack_name }
+            "%stack_name%": { get_param: "OS::stack_name" }
       flavor: { get_param: flavor }
       image: { get_param: image }
       key_name: { get_param: ssh_keypair_name }
