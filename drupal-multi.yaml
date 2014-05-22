@@ -15,7 +15,6 @@ parameter_groups:
   - webserver_count
   - webserver_flavor
   - webserver_image
-  - ssh_keypair_name
 
 - label: Database Settings
   parameters:
@@ -152,7 +151,7 @@ resources:
         properties:
           flavor: { get_param: webserver_flavor }
           image: { get_param: webserver_image }
-          ssh_keypair_name: { get_param: ssh_keypair_name }
+          ssh_keypair_name: { get_param: site_domain }
           ssh_private_key: { get_attr: [ssh_keypair, private_key] }
           db_name: drupal_db
           db_hostname: { get_attr: [db, hostname] }
