@@ -108,6 +108,7 @@ resources:
       kitchen: { get_param: kitchen }
       chef_version: { get_param: chef_version }
       node:
+        fqdn: { get_param: "OS::stack_name" }
         drupal:
           version: 7.28
           db:
