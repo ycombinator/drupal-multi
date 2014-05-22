@@ -91,7 +91,7 @@ resources:
     properties:
       name:
         str_replace:
-          template: %stack_name%_webserver
+          template: "%stack_name%_webserver"
           params:
             %stack_name%: { get_param: OS::stack_name }
       flavor: { get_param: flavor }
