@@ -118,11 +118,6 @@ parameters:
         Must be shorter than 16 characters, this is due to MySQL's maximum
         username length.
 
-  db_root_username:
-    description: Root username for the database
-    type: string
-    default: drupal_root
-
 resources:
 
   ssh_keypair:
@@ -132,12 +127,6 @@ resources:
       save_private_key: true
 
   db_password:
-    type: "OS::Heat::RandomString"
-    properties:
-      length: 16
-      sequence: lettersdigits
-
-  db_root_password:
     type: "OS::Heat::RandomString"
     properties:
       length: 16
@@ -154,9 +143,6 @@ resources:
       users:
         - name: { get_param: db_username }
           password: { get_resource: db_password }
-          databases: [ drupal_db ]
-        - name: { get_param: db_root_username }
-          password: { get_resource: db_root_password }
           databases: [ drupal_db ]
 
   webservers_setup:
@@ -176,8 +162,6 @@ resources:
           db_hostname: { get_attr: [db, hostname] }
           db_username: { get_param: db_username }
           db_password: { get_resource: db_password }
-          db_root_username: { get_param: db_root_username }
-          db_root_password: { get_resource: db_root_password }
 
   load_balancer:
     type: "Rackspace::Cloud::LoadBalancer"

@@ -73,15 +73,6 @@ parameters:
     description: Password for the database user with access to the Drupal database
     type: string
 
-  db_root_username:
-    description: Root username for the database
-    type: string
-    default: drupal_root
-
-  db_root_password:
-    description: Password for the database root user
-    type: string
-
   # Chef configuration parameters
   kitchen:
     description: URL for the kitchen to use, fetched using git
@@ -121,9 +112,6 @@ resources:
             database: { get_param: db_name }
             user: { get_param: db_username }
             password: { get_param: db_password }
-        mysql:
-          server_root_user: { get_param: db_root_username }
-          server_root_password: { get_param: db_root_password }
         run_list: ["recipe[apt]",
                    "recipe[drupal]"]
 
