@@ -15,6 +15,8 @@ parameter_groups:
   - webserver_count
   - webserver_flavor
   - webserver_image
+  - ssh_keypair_name
+  - ssh_private_key
 
 - label: Database Settings
   parameters:
@@ -75,6 +77,15 @@ parameters:
       - Ubuntu 12.04 LTS (Precise Pangolin)
       description: Must be a supported operating system.
 
+  ssh_keypair_name:
+    description: Nova keypair name for ssh access to the server
+    type: string
+
+  ssh_private_key:
+    description: Private SSH key
+    type: string
+    default: false
+
   # Database settings
   db_instance_flavor:
     description: Rackspace Cloud Database Flavor to determine amount of RAM
@@ -115,12 +126,6 @@ parameters:
 
 resources:
 
-  ssh_keypair:
-    type: "OS::Nova::KeyPair"
-    properties:
-      name: { get_param: site_domain }
-      save_private_key: true
-
   db_password:
     type: "OS::Heat::RandomString"
     properties:
@@ -151,8 +156,8 @@ resources:
         properties:
           flavor: { get_param: webserver_flavor }
           image: { get_param: webserver_image }
-          ssh_keypair_name: { get_param: site_domain }
-          ssh_private_key: { get_attr: [ssh_keypair, private_key] }
+          ssh_keypair_name: { get_param: ssh_keypair_name }
+          ssh_private_key: { get_param: ssh_private_key }
           db_name: drupal_db
           db_hostname: { get_attr: [db, hostname] }
           db_username: { get_param: db_username }
