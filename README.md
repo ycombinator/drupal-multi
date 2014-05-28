@@ -12,8 +12,8 @@ to install and configure Drupal on the webservers.
 
 Requirements
 ============
-* A Heat provider that supports the Rackspace `OS::Heat::ChefSolo` plugin.
-* A Rackspace Cloud username, password, and tenant id.
+* A Heat provider that supports the OpenStack `OS::Heat::ChefSolo` plugin.
+* A Rackspace Cloud account. Signup at https://cart.rackspace.com/cloud/.
 * [python-heatclient](https://github.com/openstack/python-heatclient)
 `>= v0.2.8`:
 
@@ -39,23 +39,27 @@ export OS_TENANT_ID=<Your Rackspace cloud tenant ID>
 export OS_AUTH_URL=<Your Rackspace cloud's authentication endpoint URL>
 ```
 
+* For US, set `OS_AUTH_URL` to https://identity.api.rackspacecloud.com/v2.0/
+* For UK, set `OS_AUTH_URL` to https://lon.identity.api.rackspacecloud.com/v2.0/
+
 2. Ensure that you have created an SSH keypair and uploaded the public key
    to your Rackspace cloud account, in the same region as you'll be creating
-   your stack.
+   your stack. This is also a one-time setup step.
 
 3. Then, create the stack.
 
 ```
 heat stack-create mysite.com 
-  --os-region-name <Rackspace cloud region in which to create stack> \
+  --os-region-name DFW \
   -u https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-multi.yaml \
   -P ssh_keypair_name=mine \
   -P ssh_private_key="$(cat ~/.ssh/id_rsa)"
 ```
 
-The example above assumes an SSH keypair named `mine` exists in the same Rackspace cloud region
-in which you want to create the stack. It also assumes the private key for this kepair is stored
-in `~/.ssh/id_rsa`.
+The example above assumes the following:
+* you want to create the stack in the `DFW` region of the Rackspace Cloud,
+* an SSH keypair named `mine` exists in the same Rackspace cloud region in which you want to create the stack, and
+* the corresponding private key for this kepair is stored in `~/.ssh/id_rsa`.
 
 Parameters
 ==========
