@@ -12,7 +12,6 @@ to install and configure Drupal on the webservers.
 
 Requirements
 ============
-* A Heat provider that supports the OpenStack `OS::Heat::ChefSolo` plugin.
 * A Rackspace Cloud account. Signup at https://cart.rackspace.com/cloud/.
 * [python-heatclient](https://github.com/openstack/python-heatclient)
 `>= v0.2.8`:
