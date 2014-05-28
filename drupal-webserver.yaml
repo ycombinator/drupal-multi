@@ -1,7 +1,7 @@
 heat_template_version: 2013-05-23
 
 description: |
-  This is a Heat template to deploy a single Linux server running a WordPress.
+  This is a Heat template to deploy a single Linux server running Drupal.
 
 parameters:
 

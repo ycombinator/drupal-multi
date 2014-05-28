@@ -1,7 +1,7 @@
 Description
 ===========
 
-This is a template for deploying a [Drupal](http://wordpress.org/)-powered web
+This is a template for deploying a [Drupal](https://drupal.org/)-powered web
 site across multiple webservers. By default, this template will create a Cloud
 Load Balancer, a Cloud Database instance, and 2 Cloud Servers to act as webservers.
 The webservers will connect to the database instance and the load balancer will
