@@ -31,30 +31,30 @@ Here is an example of how to deploy this template using the
 1. First, export some values required to connect to an Rackspace Cloud. This
    is a one-time setup step.
 
-```
-export OS_USERNAME=<Your Rackspace cloud account username>
-export OS_PASSWORD=<Your Rackspace cloud account password>
-export OS_TENANT_ID=<Your Rackspace cloud tenant ID>
-export OS_AUTH_URL=<Your Rackspace cloud's authentication endpoint URL>
-```
-
-* For US, set `OS_AUTH_URL` to https://identity.api.rackspacecloud.com/v2.0/
-* For UK, set `OS_AUTH_URL` to https://lon.identity.api.rackspacecloud.com/v2.0/
-
+    ```
+    export OS_USERNAME=<Your Rackspace cloud account username>
+    export OS_PASSWORD=<Your Rackspace cloud account password>
+    export OS_TENANT_ID=<Your Rackspace cloud tenant ID>
+    export OS_AUTH_URL=<Your Rackspace cloud's authentication endpoint URL>
+    ```
+    
+    * For US, set `OS_AUTH_URL` to https://identity.api.rackspacecloud.com/v2.0/
+    * For UK, set `OS_AUTH_URL` to https://lon.identity.api.rackspacecloud.com/v2.0/
+    
 2. Ensure that you have created an SSH keypair and uploaded the public key
    to your Rackspace cloud account, in the same region as you'll be creating
    your stack. This is also a one-time setup step.
 
 3. Then, create the stack.
 
-```
-heat stack-create mysite.com 
-  --os-region-name DFW \
-  -u https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-multi.yaml \
-  -P ssh_keypair_name=mine \
-  -P ssh_private_key="$(cat ~/.ssh/id_rsa)"
-```
-
+    ```
+    heat stack-create mysite.com 
+      --os-region-name DFW \
+      -u https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-multi.yaml \
+      -P ssh_keypair_name=mine \
+      -P ssh_private_key="$(cat ~/.ssh/id_rsa)"
+    ```
+    
 The example above assumes the following:
 * you want to create the stack in the `DFW` region of the Rackspace Cloud,
 * an SSH keypair named `mine` exists in the same Rackspace cloud region in which you want to create the stack, and
