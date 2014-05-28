@@ -47,8 +47,9 @@ Here is an example of how to deploy this template using the
 3. Then, create the stack.
 
     ```
-    heat stack-create my_drupal_site \
+    heat \
       --os-region-name DFW \
+      stack-create my_drupal_site \
       -u https://raw.githubusercontent.com/ycombinator/drupal-multi/master/drupal-multi.yaml \
       -P ssh_keypair_name=mine \
       -P ssh_private_key="$(cat ~/.ssh/id_rsa)"
