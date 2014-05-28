@@ -56,8 +56,8 @@ Here is an example of how to deploy this template using the
     ```
     
 The example above assumes the following:
-* You want to name your stack `my_drupal_site`,
 * You want to create the stack in the `DFW` region of the Rackspace Cloud,
+* You want to name your stack `my_drupal_site`,
 * An SSH keypair named `mine` exists in the same Rackspace cloud region in which you want to create the stack, and
 * The corresponding private key for this kepair is stored in `~/.ssh/id_rsa`.
 
