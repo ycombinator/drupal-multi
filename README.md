@@ -77,8 +77,8 @@ the `-P` flag to specify a custom parameter.
 
 Outputs
 =======
-Once a stack comes online, use `heat output-list` to see all available outputs.
-Use `heat output-show <OUTPUT NAME>` to get the value fo a specific output.
+Once a stack comes online, use `heat --os-region-name DFW output-list` to see all available outputs.
+Use `heat --os-region-name DFW output-show <OUTPUT NAME>` to get the value fo a specific output.
 
 * `site_ip`: Public IP address of the web site (i.e. load balancer)
 
