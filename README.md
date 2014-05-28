@@ -36,8 +36,7 @@ Here is an example of how to deploy this template using the
     export OS_PASSWORD=<Your Rackspace cloud account password>
     export OS_TENANT_ID=<Your Rackspace cloud tenant ID>
     export OS_AUTH_URL=<Your Rackspace cloud's authentication endpoint URL>
-    ```
-    
+    ```    
     * For US, set `OS_AUTH_URL` to https://identity.api.rackspacecloud.com/v2.0/
     * For UK, set `OS_AUTH_URL` to https://lon.identity.api.rackspacecloud.com/v2.0/
     
